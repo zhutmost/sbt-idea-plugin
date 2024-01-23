@@ -1,6 +1,7 @@
 package org.jetbrains.sbtidea
 
 import org.jetbrains.sbtidea.download.*
+import org.jetbrains.sbtidea.instrumentation.ManipulateBytecode
 import org.jetbrains.sbtidea.packaging.PackagingKeys.*
 import org.jetbrains.sbtidea.searchableoptions.BuildIndex
 import org.jetbrains.sbtidea.tasks.*
@@ -179,6 +180,9 @@ trait Init { this: Keys.type =>
 
     unmanagedResourceDirectories in Compile += baseDirectory.value / "resources",
     unmanagedResourceDirectories in Test    += baseDirectory.value / "testResources",
+
+    instrumentThreadingAnnotations := true,
+    Compile / manipulateBytecode := ManipulateBytecode.manipulateBytecodeTask(Compile).value,
 
     aggregate.in(packageArtifactZip) := false,
     aggregate.in(packageMappings) := false,
